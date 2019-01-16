@@ -14,7 +14,7 @@ SELECT *, pg_size_pretty(total_bytes) AS total
           WHERE relkind = 'r' 
   ) a
 ) a 
-where table_name like 'tb_chemical_space%' 
+where table_name like 'tb_%' 
 --order by total_bytes desc
 --order by row_estimate desc;
 order by table_name asc;
