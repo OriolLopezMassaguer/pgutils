@@ -14,10 +14,20 @@ SELECT *, pg_size_pretty(total_bytes) AS total
           WHERE relkind = 'r' 
   ) a
 ) a 
-where table_name like 'tb_%' 
+where table_name not like 'pg_%' 
+and table_schema ='public'
 --order by total_bytes desc
 order by row_estimate desc;
 --rder by table_name asc;
+
+SELECT
+   relname AS table_name,
+   pg_size_pretty(pg_total_relation_size(relid)) AS total,
+   pg_size_pretty(pg_relation_size(relid)) AS internal,
+   pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
+   pg_size_pretty(pg_indexes_size(relid)) AS indexes
+    FROM pg_catalog.pg_statio_user_tables ORDER BY pg_total_relation_size(relid) DESC;
+
 
 
    
@@ -40,7 +50,7 @@ LEFT JOIN
 WHERE
   pgNamespace.nspname NOT IN ('pg_catalog', 'information_schema') AND
   pgClass.relkind='r'
-order by tableName
+order by tableName;
 
 
 
