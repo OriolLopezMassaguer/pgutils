@@ -3,20 +3,19 @@ SELECT
 FROM 
     pg_stat_activity 
 WHERE 
-     datname = 'thebe_40_milestone2'
+     datname = 'thebe_40_milestone3'
+     and query like '%image%'
 
 
 
 SELECT 
-    pg_terminate_backend(81574) 
+    pg_terminate_backend(pid) 
 FROM 
     pg_stat_activity 
 WHERE 
-    -- don't kill my own connection!
     pid <> pg_backend_pid()
-    -- don't kill the connections to other databases
-    AND datname = 'thebe_40_milestone2'
-    and application_name like '%JDBC%'
+     and datname = 'thebe_40_milestone3'
+     and query like '%image%'
 
    
   SELECT pid, age(clock_timestamp(), query_start), usename, query 
@@ -34,8 +33,7 @@ select count(*) from tb_medchem_scaffold where imagescaffold is not null
 
 limit 10
 
-create view scaffold_export as
-select molrdkit, inchikeymurckoscaffold
+select  count(*)  from tb_medchem_scaffold where imagescaffold is not null
 
 
 ALTER TABLE public.tb_medchem_molecule ADD sizer int NULL;

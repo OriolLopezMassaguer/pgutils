@@ -1,3 +1,15 @@
+SELECT
+   relname AS table_name,
+   pg_size_pretty(pg_total_relation_size(relid)) AS total,
+   pg_size_pretty(pg_relation_size(relid)) AS internal,
+   pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
+   pg_size_pretty(pg_indexes_size(relid)) AS indexes
+    FROM pg_catalog.pg_statio_user_tables 
+  -- where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
+    ORDER BY pg_total_relation_size(relid) DESC;
+
+
+
 SELECT *, pg_size_pretty(total_bytes) AS total
     , pg_size_pretty(index_bytes) AS INDEX
     , pg_size_pretty(toast_bytes) AS toast
@@ -14,19 +26,13 @@ SELECT *, pg_size_pretty(total_bytes) AS total
           WHERE relkind = 'r' 
   ) a
 ) a 
-where table_name not like 'pg_%' 
+where 
+table_name not like 'pg_%'
+and table_name in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
 and table_schema ='public'
 --order by total_bytes desc
 order by row_estimate desc;
 --rder by table_name asc;
-
-SELECT
-   relname AS table_name,
-   pg_size_pretty(pg_total_relation_size(relid)) AS total,
-   pg_size_pretty(pg_relation_size(relid)) AS internal,
-   pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
-   pg_size_pretty(pg_indexes_size(relid)) AS indexes
-    FROM pg_catalog.pg_statio_user_tables ORDER BY pg_total_relation_size(relid) DESC;
 
 
 
