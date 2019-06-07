@@ -3,7 +3,7 @@ SELECT
 FROM 
     pg_stat_activity 
 WHERE 
-     datname = 'thebe_40_milestone3'
+     datname = 'thebe'
      and query like '%image%'
 
 
@@ -14,8 +14,11 @@ FROM
     pg_stat_activity 
 WHERE 
     pid <> pg_backend_pid()
-     and datname = 'thebe_40_milestone3'
+     and datname = 'thebe_40_final2'
      and query like '%image%'
+     
+     
+     select * from pg_stat_progress_vacuum
 
    
   SELECT pid, age(clock_timestamp(), query_start), usename, query 
