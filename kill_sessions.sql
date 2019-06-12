@@ -1,10 +1,10 @@
-SELECT 
+SELECT client_addr::text,
    *
 FROM 
     pg_stat_activity 
 WHERE 
-     datname = 'thebe'
-     and query like '%image%'
+     datname = 'thebe_40_final1'
+     and client_addr::text='10.3.117.15/32'
 
 
 
@@ -14,8 +14,8 @@ FROM
     pg_stat_activity 
 WHERE 
     pid <> pg_backend_pid()
-     and datname = 'thebe_40_final2'
-     and query like '%image%'
+     and datname = 'thebe_40_final1'
+     and client_addr::text='10.3.117.15/32'
      
      
      select * from pg_stat_progress_vacuum
