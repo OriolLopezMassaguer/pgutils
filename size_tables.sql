@@ -5,7 +5,7 @@ SELECT
    pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
    pg_size_pretty(pg_indexes_size(relid)) AS indexes
     FROM pg_catalog.pg_statio_user_tables 
-  -- where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
+   where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
     ORDER BY pg_total_relation_size(relid) DESC;
 
 

@@ -9,4 +9,4 @@ where username ='tdeboer'
 
 
 
-INSERT INTO public.tb_user (tb_user_id, username, md5pwd, active, admin_role) VALUES (13, 'wfusion', MD5('jahm0Phe'), true, false);
+INSERT INTO public.tb_user (username, md5pwd, active, admin_role) VALUES ('demo', MD5('demo'), true, false);
