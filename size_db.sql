@@ -12,8 +12,6 @@ FROM pg_catalog.pg_database d
         THEN pg_catalog.pg_database_size(d.datname)
         ELSE NULL
     END DESC -- nulls first
-    LIMIT 20;
+
    
-   
-   
-    
+

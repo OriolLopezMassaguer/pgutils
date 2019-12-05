@@ -1,0 +1,2 @@
+pg_bloat_check.py -c "host=kappa dbname=thebe_40_final6 user=postgres password=postgres" --create_stats_table --bloat_schema=monitoring
+pg_bloat_check.py -c "host=kappa dbname=thebe_40_final6 user=postgres password=postgres" --bloat_schema=monitoring -z 10485760 -p 45 -s 5242880

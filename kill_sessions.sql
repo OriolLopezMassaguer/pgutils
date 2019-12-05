@@ -1,12 +1,11 @@
-SELECT client_addr::text,
+SELECT client_addr::text,state,query,
    *
 FROM 
     pg_stat_activity 
 WHERE 
-     datname = 'thebe'
-     and client_addr::text='10.3.117.15/32'
-
-
+     datname in ('thebe_40_dev')
+--   and client_addr::text='10.3.117.63/32'
+     
 
 SELECT 
     pg_terminate_backend(pid) 
@@ -14,11 +13,13 @@ FROM
     pg_stat_activity 
 WHERE 
     pid <> pg_backend_pid()
-     and datname = 'thebe_40_final2'
-     and client_addr::text='10.3.117.14/32'
+    and datname in ('thebe_40_dev')
+     
+
+     
+     and client_addr::text='10.3.117.63/32'
      
      
-     select * from pg_stat_progress_vacuum
 
    
   SELECT pid, age(clock_timestamp(), query_start), usename, query 
@@ -26,24 +27,15 @@ FROM pg_stat_activity
 WHERE query != '<IDLE>' AND query NOT ILIKE '%pg_stat_activity%' and datname = 'thebe_dev_40_ce' 
 ORDER BY query_start desc;
 
-select imagescaffold, inchikeymurckoscaffold, imagescaffold_resized from tb_medchem_scaffold 
-where imagescaffold_resized is not null
+  SELECT pid, application_name, to_char((clock_timestamp() - query_start), 'HH24 hrs MI "minutes" SS "seconds"'), usename, query 
+FROM pg_stat_activity 
+where application_name like 'IO.%'
+order by application_name asc,age(clock_timestamp(), query_start) desc
 
 
-select count(*) from tb_medchem_scaffold where imagescaffold is not null and imagescaffold_resized is  null
+SELECT pid
+                         , application_name
+                          , to_char((clock_timestamp() - query_start), 'HH24 hrs MI "minutes" SS "seconds"     '),
+                          usename , query FROM pg_stat_activity 
+                            where application_name like 'IO.%' and query  not like '%pg_stat_activity%'
 
-select count(*) from tb_medchem_scaffold where imagescaffold is not null
-
-limit 10
-
-select  count(*)  from tb_medchem_scaffold where imagescaffold is not null
-
-
-ALTER TABLE public.tb_medchem_molecule ADD sizer int NULL;
-
-ALTER TABLE public.tb_medchem_scaffold ADD sizer int NULL;
-
-UPDATE tb_medchem_scaffold SET processed = null,sizer = 5 where inchikeymurckoscaffold= ''
-
-from tb_medchem_scaffold where molrdkit is not null
-limit 10

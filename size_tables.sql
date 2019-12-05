@@ -1,11 +1,13 @@
 SELECT
    relname AS table_name,
+   pg_total_relation_size(relid) total_raw,
    pg_size_pretty(pg_total_relation_size(relid)) AS total,
    pg_size_pretty(pg_relation_size(relid)) AS internal,
    pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
-   pg_size_pretty(pg_indexes_size(relid)) AS indexes
+   pg_size_pretty(pg_indexes_size(relid)) AS indexes,
+   count_rows('public', relname)
     FROM pg_catalog.pg_statio_user_tables 
-   where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
+   --where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
     ORDER BY pg_total_relation_size(relid) DESC;
 
 
