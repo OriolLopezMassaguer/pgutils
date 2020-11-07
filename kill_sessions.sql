@@ -3,7 +3,7 @@ SELECT client_addr::text,state,query,
 FROM 
     pg_stat_activity 
 WHERE 
-     datname in ('thebe_40_dev')
+     datname in ('thebe_50_dev')
 --   and client_addr::text='10.3.117.63/32'
      
 
@@ -13,7 +13,7 @@ FROM
     pg_stat_activity 
 WHERE 
     pid <> pg_backend_pid()
-    and datname in ('thebe_40_dev')
+    and datname in ('thebe_50_dev')
      
 
      
@@ -39,3 +39,5 @@ SELECT pid
                           usename , query FROM pg_stat_activity 
                             where application_name like 'IO.%' and query  not like '%pg_stat_activity%'
 
+
+                            select count(*) from  tb_ctfaers_drug2event tcde 
