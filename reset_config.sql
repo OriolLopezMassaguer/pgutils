@@ -1,1 +1,2 @@
-alter system reset all;
+select version();
+

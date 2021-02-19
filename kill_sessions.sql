@@ -1,10 +1,12 @@
-SELECT client_addr::text,state,query,
+SELECT client_addr::text,state,query,state,
    *
 FROM 
     pg_stat_activity 
 WHERE 
-     datname in ('thebe_50_dev')
---   and client_addr::text='10.3.117.63/32'
+     datname in ('thebe_50_intn') 
+--     and application_name ='pg_restore'
+--   and client_addr IN ('10.9.89.228/32')
+order by state asc
      
 
 SELECT 
@@ -13,7 +15,20 @@ FROM
     pg_stat_activity 
 WHERE 
     pid <> pg_backend_pid()
-    and datname in ('thebe_50_dev')
+    and datname in ('thebe_50_intn')
+
+
+SELECT
+  pid,
+  now() - pg_stat_activity.query_start AS duration,
+  query,
+  state
+FROM pg_stat_activity
+WHERE (now() - pg_stat_activity.query_start) > interval '5 minutes'
+--and state!='idle';
+
+
+
      
 
      
@@ -41,3 +56,17 @@ SELECT pid
 
 
                             select count(*) from  tb_ctfaers_drug2event tcde 
+                            
+                            
+                            
+insert into chk_ent_target
+select et.target_id ,'no main name in thesaurus'
+from ent_target et 
+where not exists 
+(
+select null
+from ent_thesaurus et2 
+where et2.entity_id = et.target_id 
+and et2.is_main_name
+and et2.entity_type ='target'
+)

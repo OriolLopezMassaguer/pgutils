@@ -1,17 +1,3 @@
-SELECT
-   relname AS table_name,
-   pg_total_relation_size(relid) total_raw,
-   pg_size_pretty(pg_total_relation_size(relid)) AS total,
-   pg_size_pretty(pg_relation_size(relid)) AS internal,
-   pg_size_pretty(pg_table_size(relid) - pg_relation_size(relid)) AS external,
-   pg_size_pretty(pg_indexes_size(relid)) AS indexes,
-   count_rows('public', relname)
-    FROM pg_catalog.pg_statio_user_tables 
-   where relname like '%faers%'
-    ORDER BY pg_total_relation_size(relid) DESC;
-
-
-
 SELECT *, pg_size_pretty(total_bytes) AS total
     , pg_size_pretty(index_bytes) AS INDEX
     , pg_size_pretty(toast_bytes) AS toast
@@ -31,10 +17,55 @@ SELECT *, pg_size_pretty(total_bytes) AS total
 where 
 table_name not like 'pg_%'
 and table_name like '%faers%'
-and table_schema ='public'
+and table_schema ='pharmvill_old'
 --order by total_bytes desc
 order by row_estimate desc;
 --rder by table_name asc;
+
+
+
+create or replace function 
+count_rows(schema text, tablename text) returns integer
+as
+$body$
+declare
+  result integer;
+  query varchar;
+begin
+  query := 'SELECT count(1) FROM ' || schema || '.' || tablename;
+  execute query into result;
+  return result;
+end;
+$body$
+language plpgsql;
+
+
+
+
+
+select 
+  table_schema,
+  table_name,
+  count_rows(table_schema, table_name)
+from information_schema.tables
+where 
+  table_schema not in ('pg_catalog', 'information_schema') 
+  --and table_schema  in ('aers_raw') 
+  and table_type='BASE TABLE'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -62,28 +93,3 @@ order by tableName;
 
 
 
-create or replace function 
-count_rows(schema text, tablename text) returns integer
-as
-$body$
-declare
-  result integer;
-  query varchar;
-begin
-  query := 'SELECT count(1) FROM ' || schema || '.' || tablename;
-  execute query into result;
-  return result;
-end;
-$body$
-language plpgsql;
-
-
-select 
-  table_schema,
-  table_name, 
-  count_rows(table_schema, table_name)
-from information_schema.tables
-where 
-  table_schema not in ('pg_catalog', 'information_schema') 
-  and table_type='BASE TABLE'
-order by 3 desc
