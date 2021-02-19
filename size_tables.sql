@@ -7,7 +7,7 @@ SELECT
    pg_size_pretty(pg_indexes_size(relid)) AS indexes,
    count_rows('public', relname)
     FROM pg_catalog.pg_statio_user_tables 
-   --where relname in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
+   where relname like '%faers%'
     ORDER BY pg_total_relation_size(relid) DESC;
 
 
@@ -30,7 +30,7 @@ SELECT *, pg_size_pretty(total_bytes) AS total
 ) a 
 where 
 table_name not like 'pg_%'
-and table_name in ('tb_chemical_space','tb_medchem_molecule','tb_medchem_scaffold')
+and table_name like '%faers%'
 and table_schema ='public'
 --order by total_bytes desc
 order by row_estimate desc;
