@@ -1,7 +1,10 @@
-SELECT *, pg_size_pretty(total_bytes) AS total
-    , pg_size_pretty(index_bytes) AS INDEX
-    , pg_size_pretty(toast_bytes) AS toast
-    , pg_size_pretty(table_bytes) AS TABLE
+create or replace view public.size_tables as 
+SELECT 	
+	table_schema,
+	table_name,
+	round(total_bytes::numeric / 1073741824::numeric,2) total_size,
+	round(index_bytes::numeric / 1073741824::numeric,2) AS index_size,    
+    round(table_bytes::numeric / 1073741824::numeric,2) AS table_size
   FROM (
   SELECT *, total_bytes-index_bytes-COALESCE(toast_bytes,0) AS table_bytes FROM (
       SELECT c.oid,nspname AS table_schema, relname AS TABLE_NAME
@@ -14,13 +17,8 @@ SELECT *, pg_size_pretty(total_bytes) AS total
           WHERE relkind = 'r' 
   ) a
 ) a 
-where 
-table_name not like 'pg_%'
-and table_name like '%faers%'
-and table_schema ='pharmvill_old'
---order by total_bytes desc
-order by row_estimate desc;
---rder by table_name asc;
+where table_name not like 'pg_%'
+
 
 
 

@@ -1,10 +1,10 @@
-export DB1=thebe_50_dev
-export HOST1=kappa
-export SCHEMA1=chemspace
-export DB2=thebe_50_oriol
-export HOST2=kappa   
-export SCHEMA2=chemspace
-export TAG=cs_review
+export DB1=thebe_50_int
+export HOST1=omicron
+export SCHEMA1=$1
+export DB2=thebe_50_int
+export HOST2=omicron
+export SCHEMA2=$2
+export TAG=$1
 export PGDIFF_PATH=/home/oriol/soft/pgdiff
 export FOLDER=./$TAG/
 mkdir $FOLDER

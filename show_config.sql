@@ -12,3 +12,7 @@ show max_wal_size;
 show max_worker_processes;
 show max_parallel_workers_per_gather;
 show max_parallel_workers;
+
+show min_parallel_table_scan_size;
+
+show min_parallel_index_scan_size;
