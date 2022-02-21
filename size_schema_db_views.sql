@@ -1,5 +1,4 @@
--- public.schema_size source
-
+-- this view shoul be created in every database in the schema public
 CREATE OR REPLACE VIEW public.schema_size
 AS SELECT t.schema_name,
     sum(t.table_size) AS siz,
@@ -12,7 +11,7 @@ AS SELECT t.schema_name,
   GROUP BY t.schema_name, t.database_size
   ORDER BY (sum(t.table_size)) DESC;
 
-
+-- this view should be created in the database postgres schema public
 CREATE OR REPLACE VIEW public.size_db
 AS SELECT d.datname AS name,
     pg_get_userbyid(d.datdba) AS owner,
